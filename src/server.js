@@ -4,8 +4,8 @@ const MusicService = require('./services/inMemory/MusicService');
 const MusicValidator = require('./validator/music');
 require('dotenv').config();
 
-const init = async () -> {
-    const MusicService = new MusicService();
+const init = async () => {
+    const OpenMusic = new MusicService();
     const server = Hapi.server({
         // jangan lupa buat file .env
         port: process.env.PORT,
