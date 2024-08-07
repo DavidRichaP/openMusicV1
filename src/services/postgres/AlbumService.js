@@ -4,7 +4,9 @@ const { InvariantError } = require('../../exceptions/InvariantError');
 const { mapDBToModel } = require('../../utils');
 const { date } = require('joi');
 
-class OpenMusic {
+// add database to insert to
+
+class AlbumService {
     constructor() {
         this._pool = new Pool();
     }
@@ -12,11 +14,11 @@ class OpenMusic {
     async addAlbum({ name, year }) {
         const numbers = nanoid(16);
         const id = `album-${numbers}`;
-        const createdAt = new Date().toISOString();
+        const createdAt = new date().toISOString();
         const updatedAt = createdAt
 
         const query = { 
-            text: 'INSERT INTO Album_db values ($1, $2, $3, $4, $5) RETURNING id',
+            text: 'INSERT INTO OpenMusicBackend values ($1, $2, $3, $4, $5) RETURNING id',
             values: [id, name, year , createdAt, updatedAt],
         };
 
@@ -31,19 +33,19 @@ class OpenMusic {
     }
 
     async getAlbums() {
-        const result = await this._pool.query('SELECT * FROM Album_db');
+        const result = await this._pool.query('SELECT * FROM OpenMusicBackend');
         return result.rows.map(mapDBToModel);
     }
 
     async addSong({ title, year, genre, performer, duration, albumId }) {
-        const createdAt = new Date().toISOString();
+        const createdAt = new date().toISOString();
         const updatedAt = createdAt;
 
         const numbers = nanoid(16);
         const id = `song-${numbers}`;
 
         const query = {
-            text: 'INSERT INTO values ($1, $2, $3, $4, $5, $6, $7) RETURNING id',
+            text: 'INSERT INTO OpenMusicBackend values ($1, $2, $3, $4, $5, $6, $7) RETURNING id',
             values: [id, title, year, performer, genre, duration, albumId]
         }
 
@@ -58,7 +60,7 @@ class OpenMusic {
         }
     
     async getSongs() {
-        const result = await this._pool.query('SELECT * FROM ');
+        const result = await this._pool.query('SELECT * FROM OpenMusicBackend');
         return result.rows.map(mapDBToModel);
         }
 }
