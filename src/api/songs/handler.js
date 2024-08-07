@@ -1,28 +1,28 @@
-const ClientError = require('../../exceptions/');
-// masukkan custom error
+const { default: autoBind } = require('auto-bind');
+const ClientError = require('../../exceptions/ClientError');
 
-// apa harus bind satu satu? boleh dicoba kok package auto bind
-class MusicHandler {
+class SongHandler {
     constructor(service, validator) {
         this.service = service;
-        this.validator = validator;
+        this.AlbumValidator = validator;
 
-        
-        // binder masuk sini njing
+        autoBind(this);
     }
 
-    // bawah ini semua functionnya API. dari post sampe delete
-    postAlbumHandler(request, h) {
+    // from post to delete these are the handlers for songs
+    postSongHandler(request, h) {
         try {
-          const { name, year} = request.payload;
+          this.validator.validateDbPayload(request.payload);
 
-          const albumId = this.service.addAlbum({ name, year });
+          const { title, year, genre, performer, duration, albumId} = request.payload;
+
+          const SongId = this.service.addSong({ title, year, genre, performer, duration, albumId });
 
           const response = h.response({
             status: 'success',
-            message: '',
-            data {
-              albumId: albumId,
+            message: 'Lagu sukses ditambahkan',
+            data: {
+              SongId: SongId,
             },
           });
           response.code(201);
@@ -48,24 +48,24 @@ class MusicHandler {
         }
     }
 
-    getAlbumsHandler() {
-        const albums = this.service.getAlbums();
+    getSongsHandler() {
+        const songs = this.service.getSongs();
         return {
             status: 'success',
             data: {
-                albums,
+                songs,
             },
         };
     }
 
-    getAlbumByIdHandler(request, h) {
+    getSongByIdHandler(request, h) {
         try  {
             const { id } = request.params;
-            const album = this.service.getAlbumById(id);
+            const song = this.service.getSongById(id);
             return {
                 status: 'success',
                 data: {
-                 album,
+                 song,
                 },
             };
         } catch (error) {
@@ -88,17 +88,17 @@ class MusicHandler {
         }
     }
 
-    putAlbumByIdHandler(request, h) {
+    putSongByIdHandler(request, h) {
         try {
           this.validator.validateDbPayload(request.payload);
 
-          const { id } =request.params;
+          const { id } = request.params;
 
-          this.service.editAlbumById(id, request.payload);
+          this.service.editSongById(id, request.payload);
 
           return {
             status: 'success',
-            message: 'Album berhasil diperbarui',
+            message: 'Lagu berhasil diperbarui',
           };
         } catch (error) {
           if (error instanceof ClientError) {
@@ -123,10 +123,10 @@ class MusicHandler {
     deleteAlbumByIdHandler(request, h) {
         try{
             const { id } = request.params;
-            this.service.deleteNoteById(id);
+            this.service.deleteSongById(id);
             return {
                 status: 'success',
-                message: 'Album berhasil dihapus',
+                message: 'Lagu berhasil dihapus',
             };
         } catch (error) {
             if (error instanceof ClientError) {
@@ -136,7 +136,7 @@ class MusicHandler {
                 });
             }
             const response = h.response({
-                    status: 'errror',
+                    status: 'error',
                     message: 'Maaf, terjadi kegagalan pada server kami',
                 });
             response.code(500);
@@ -144,6 +144,7 @@ class MusicHandler {
             return response;    
         }
     }
+
 }
 
-module.exports = MusicHandler;
+module.exports = SongHandler;
