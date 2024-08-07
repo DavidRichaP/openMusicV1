@@ -1,13 +1,14 @@
 const Hapi = require('@hapi/hapi');
-const MusicSearch = require('./api/music-search');
-const MusicService = require('./services/inMemory/MusicService');
-const MusicValidator = require('./validator/music');
+const AlbumService = require('./services/postgres/AlbumService');
+const MusicService = require('./services/postgres/MusicService');
+const SongValidator = require('../src/validator/songs');
+const AlbumValidator = require('../src/validator/album');
 require('dotenv').config();
 
 const init = async () => {
-    const OpenMusic = new MusicService();
+    const OpenMusicSongs = new MusicService();
+    const OpenMusicAlbums = new AlbumService();
     const server = Hapi.server({
-        // jangan lupa buat file .env
         port: process.env.PORT,
         host: process.env.HOST,
         routes: {
@@ -17,13 +18,30 @@ const init = async () => {
         },
     });
 
-    await server.register({
-        plugin: MusicSearch,
-        options: {
-            service: MusicService,
-            validator: MusicValidator,
+    await server.register([
+        {
+            plugin: albums,
+            options: {
+                service: {
+                    album: OpenMusicAlbums
+                },
+                validator: {
+                    album: AlbumValidator
+                },
+            },
         },
-    });
+        {
+            plugin: songs,
+            options: {
+                service: {
+                    song: OpenMusicSongs
+                },
+            },
+            validator: {
+                song: SongValidator
+            },
+        },
+    ]);
 
     await server.start();
     console.log(`Server berjalan pada ${server.info.uri}`);
