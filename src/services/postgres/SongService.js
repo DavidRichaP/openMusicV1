@@ -4,7 +4,7 @@ const { InvariantError } = require('../../exceptions/InvariantError');
 const { mapDBToModel } = require('../../utils');
 const { date } = require('joi');
 
-class AlbumService {
+class songService {
     constructor() {
         this._pool = new Pool();
     }
@@ -41,3 +41,5 @@ class AlbumService {
         return result.rows.map(mapDBToModel);
         }
 }
+
+module.exports = songService;

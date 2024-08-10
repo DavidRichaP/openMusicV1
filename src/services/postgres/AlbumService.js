@@ -6,7 +6,7 @@ const { date } = require('joi');
 
 // add database to insert to
 
-class AlbumService {
+class albumService {
     constructor() {
         this._pool = new Pool();
     }
@@ -64,3 +64,5 @@ class AlbumService {
         return result.rows.map(mapDBToModel);
         }
 }
+
+module.exports = albumService;
