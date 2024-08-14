@@ -1,28 +1,28 @@
-const SongRoutes = [
+const SongRoutes = (handler) => [
 // routes for song handling
     {
         method: 'POST',
-        path: '/music-search',
+        path: '/songs',
         handler: handler.postSongHandler,
     },
     {
         method: 'GET',
-        path: '/music-search',
+        path: '/songs',
         handler: handler.getSongsHandler,
     },
     {
         method: 'GET',
-        path: '/music-search/{id}',
+        path: '/songs/{id}',
         handler: handler.getSongByIdHandler,
     },
     {
         method: 'PUT',
-        path: '/music-search/{id}',
+        path: '/songs/{id}',
         handler: handler.putSongByIdHandler,
     },
     {
         method: 'DELETE',
-        path: '/music-search/{id}',
+        path: '/songs/{id}',
         handler: handler.deleteSongByIdHandler,
     },
 ];
