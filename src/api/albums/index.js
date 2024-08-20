@@ -1,12 +1,12 @@
-const { version } = require('joi');
-const AlbumsHandler = require('./handler');
+const { version } = require('joi')
+const AlbumsHandler = require('./handler')
 const routes = require('./routes')
 
 module.exports = {
-    name: 'OpenMusic-Albums',
-    version: '1.0.0',
-    register: async (server, { service, validator }) => {
-        const OpenMusic = new AlbumsHandler(service , validator);
-        server.route(routes(OpenMusic));
-    },
-};
+	name: 'album',
+	version: '1.0.0',
+	register: async (server, { service, validator }) => {
+		const OpenMusic = new AlbumsHandler(service, validator)
+		server.route(routes(OpenMusic))
+	},
+}
