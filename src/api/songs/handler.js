@@ -30,7 +30,7 @@ class SongHandler {
 				status: 'success',
 				message: 'Lagu sukses ditambahkan',
 				data: {
-					SongId: songs,
+					songId: songs,
 				},
 			})
 			response.code(201)
@@ -56,7 +56,7 @@ class SongHandler {
 	}
 
 	async getSongsHandler() {
-		const songs = this._service.getSongs()
+		const songs = await this._service.getSongs()
 		return {
 			status: 'success',
 			data: {
@@ -101,7 +101,7 @@ class SongHandler {
 
 			const { id } = request.params
 
-			this._service.editSongById(id, request.payload)
+			await this._service.editSongById(id, request.payload)
 
 			return {
 				status: 'success',
@@ -130,7 +130,7 @@ class SongHandler {
 	async deleteSongByIdHandler(request, h) {
 		try {
 			const { id } = request.params
-			this._service.deleteSongById(id)
+			await this._service.deleteSongById(id)
 			return {
 				status: 'success',
 				message: 'Lagu berhasil dihapus',
