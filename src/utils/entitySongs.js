@@ -1,6 +1,4 @@
-// here will be for DB mapping
-
-const mapDBToModel = ({
+const detailedMapping = ({
     id,
     name,
     year,
@@ -24,5 +22,14 @@ const mapDBToModel = ({
     updatedAt: updated_at,
   });
   
-  module.exports = (mapDBToModel);
-  
+  const simpleMapping = ({
+    id,
+    title,
+    performer,
+  }) => ({
+    id,
+    title,
+    performer,
+  })
+
+  module.exports = {detailedMapping,simpleMapping};
